@@ -23,6 +23,15 @@ export default function Navigation() {
         {user ? (
           <>
             <span className="mr-4">Welcome, {user.username}</span>
+            <Link href="/reviews/create">
+              <span className="mr-4">Create Review</span>
+            </Link>
+            <Link href="/search">
+              <span className="mr-4">Search</span>
+            </Link>
+            <Link href={`/profile/${user.username}`}>
+              <span className="mr-4">Profile</span>
+            </Link>
             <button onClick={handleLogout} className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700">
               Logout
             </button>
