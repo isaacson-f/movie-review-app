@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getIronSession } from 'iron-session/next'
+import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
 import prisma from '@/lib/prisma'
@@ -10,7 +10,8 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getIronSession<{ user?: User }>(cookies(), sessionOptions)
+  const cookieStore = await cookies()
+  const session = await getIronSession<{ user?: User }>(cookieStore, sessionOptions)
   const loggedInUser = session.user
 
   if (!loggedInUser) {

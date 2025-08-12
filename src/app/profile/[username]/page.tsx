@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getIronSession } from 'iron-session/next'
+import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
 import prisma from '@/lib/prisma'
@@ -38,7 +38,8 @@ async function getProfileUser(username: string): Promise<ProfileUser | null> {
 }
 
 async function getLoggedInUser() {
-  const session = await getIronSession<{ user?: User }>(cookies(), sessionOptions)
+  const cookieStore = await cookies()
+  const session = await getIronSession<{ user?: User }>(cookieStore, sessionOptions)
   return session.user
 }
 

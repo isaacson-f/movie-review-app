@@ -1,4 +1,4 @@
-import { getIronSession } from 'iron-session/next'
+import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -7,7 +7,8 @@ import CreateReviewForm from './create-review-form'
 import { User } from '@prisma/client'
 
 async function getLoggedInUser() {
-  const session = await getIronSession<{ user?: User }>(cookies(), sessionOptions)
+  const cookieStore = await cookies()
+  const session = await getIronSession<{ user?: User }>(cookieStore, sessionOptions)
   return session.user
 }
 

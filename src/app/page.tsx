@@ -1,4 +1,4 @@
-import { getIronSession } from 'iron-session/next'
+import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 
@@ -11,7 +11,8 @@ import { User, Review } from '@prisma/client'
 type ReviewWithAuthor = Review & { author: User }
 
 async function getLoggedInUser() {
-  const session = await getIronSession<{ user?: User }>(cookies(), sessionOptions)
+  const cookieStore = await cookies()
+  const session = await getIronSession<{ user?: User }>(cookieStore, sessionOptions)
   return session.user
 }
 
