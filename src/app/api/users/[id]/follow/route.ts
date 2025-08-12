@@ -1,10 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
-
 import prisma from '@/lib/prisma'
 import { sessionOptions } from '@/lib/session'
 import { User } from '@prisma/client'
+
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getIronSession(req, new NextResponse(), sessionOptions)
+  const sessionUser = session.user
+
+  if (!sessionUser) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+  }
+
+  const userToUnfollowId = parseInt(params.id, 10)
+  const followerId = sessionUser.id
+
+  await prisma.user.update({
+    where: { id: followerId },
+    data: {
+      following: {
+        disconnect: { id: userToUnfollowId },
+      },
+    },
+  })
+
+  return NextResponse.json({ message: 'Successfully unfollowed user' })
 
 export async function POST(
   req: NextRequest,
